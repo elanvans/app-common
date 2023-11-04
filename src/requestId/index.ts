@@ -1,5 +1,5 @@
 import {RequestHandler} from 'express';
-import {uid} from '@/uid';
+import {uid} from '../uid';
 
 export const useRequestId: RequestHandler = (req, res, next) => {
     const headerName = 'X-Request-Id';

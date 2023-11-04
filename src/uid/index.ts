@@ -1,6 +1,6 @@
 import {v4 as uuid4} from 'uuid';
 import {customAlphabet} from 'nanoid';
-import {INanoIdOption} from '@/type';
+import {INanoIdOption} from '../type';
 
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
 const nanoid   = customAlphabet(alphabet);

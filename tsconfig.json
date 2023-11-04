@@ -5,11 +5,6 @@
     "rootDir": "./src",
     "moduleResolution": "node",
     "baseUrl": "./",
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ]
-    },
     "resolveJsonModule": true,
     "allowJs": true,
     "outDir": "./dist",

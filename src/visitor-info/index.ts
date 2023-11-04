@@ -1,6 +1,6 @@
 import express, {RequestHandler} from 'express';
 import {UAParser} from 'ua-parser-js';
-import {IVisitorLocation, IVisitorUserAgent} from "@/type";
+import {IVisitorLocation, IVisitorUserAgent} from "../type";
 
 const regexes = {
     ipv4: /^(?:(?:\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])\.){3}(?:\d|[1-9]\d|1\d{2}|2[0-4]\d|25[0-5])$/,

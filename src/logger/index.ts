@@ -4,7 +4,7 @@ import morgan from 'morgan';
 import colors from 'colors';
 import path from 'path';
 import 'winston-daily-rotate-file';
-import {ILogger, ILoggerOption} from "@/type";
+import {ILogger, ILoggerOption} from "../type";
 
 let reqId: string | null                                          = null;
 const {combine, timestamp, printf, colorize, align, json, errors} = format;

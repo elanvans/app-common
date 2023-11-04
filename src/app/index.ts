@@ -1,6 +1,8 @@
 import express from 'express';
-import {useLogger, useMorganLogger, useRequestId, useVisitorInfo} from '@/index';
 import helmet from 'helmet';
+import {useRequestId} from "../requestId";
+import {useLogger, useMorganLogger} from "../logger";
+import {useVisitorInfo} from "../visitor-info";
 
 export const app = (name: string, port: string) => {
     const _app = express();
