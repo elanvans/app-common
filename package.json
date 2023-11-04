@@ -1,12 +1,17 @@
 {
-  "name": "@elangovan/app-common",
+  "name": "@elanvans/app-common",
   "version": "0.0.1",
+  "author": "Elangovan",
   "packageManager": "yarn@4.0.1",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/elanvans/app-common.git"
+  },
   "scripts": {
     "dev": "nodemon",
     "build": "cross-env NODE_ENV=production tsc",
