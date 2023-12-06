@@ -1,4 +1,6 @@
 import winston from 'winston';
+import {ValidationChain} from 'express-validator';
+import {RequestHandler} from 'express';
 
 export interface IVisitorLocation {
     city: string | null;
@@ -41,15 +43,39 @@ export interface ILogger {
     http: (message: any, option?: ILoggerOption) => winston.Logger;
 }
 
+export interface IResReturnOptions {
+    statusCode?: number,
+    message?: null | string;
+    status?: string;
+}
+
+export interface IResReturn {
+    ok: (result?: null | string | object, options?: IResReturnOptions) => Response;
+    badRequest: (error?: null | string | object, options?: IResReturnOptions) => Response;
+    unauthorized: (error?: null | string | object, options?: IResReturnOptions) => Response;
+    forbidden: (error?: null | string | object, options?: IResReturnOptions) => Response;
+    notFound: (error?: null | string | object, options?: IResReturnOptions) => Response;
+    internalSeverError: (error?: null | string | object, options?: IResReturnOptions) => Response;
+}
+
 export interface IRequest {
     id: string;
     session: ISession;
+    data: any;
 }
 
 export interface IResponse {
+    return: IResReturn;
 }
 
 export interface INanoIdOption {
     size?: number;
     prefix?: string;
+}
+
+export interface IValidate {
+    init: (validations: ValidationChain[]) => RequestHandler;
+    existGivenVal: (value: string, checkFn?: Function, errMsg?: string, ...additionalValue: any[]) => Promise<boolean>;
+    existEnumVal: (value: string, checkFn?: Function, errMsg?: string) => Promise<boolean>;
+    url: (field: string, errMsg?: string, option?: { checkDns?: boolean; isOptional?: boolean; }) => ValidationChain;
 }

@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import {useRequestId} from "../requestId";
 import {useLogger, useMorganLogger} from "../logger";
 import {useVisitorInfo} from "../visitor-info";
+import {useResponseHandler} from '../responseHandler';
 
 export const app = (name: string, port: string) => {
     const _app = express();
@@ -10,6 +11,7 @@ export const app = (name: string, port: string) => {
     _app.set('port', port);
 
     _app.use(useRequestId);
+    _app.use(useResponseHandler);
     _app.use(express.raw());
     _app.use(useLogger);
     _app.use(useVisitorInfo);

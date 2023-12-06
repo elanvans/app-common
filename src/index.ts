@@ -1,7 +1,8 @@
 import {
     IRequest, IResponse, INanoIdOption,
     ILogger, ILoggerOption, ISession, IVisitor,
-    IVisitorLocation, IVisitorUserAgent
+    IVisitorLocation, IVisitorUserAgent, IResReturnOptions,
+    IResReturn, IValidate
 } from './type';
 
 declare global {
@@ -16,12 +17,14 @@ declare global {
 
 export type {
     IRequest, IResponse, INanoIdOption, ILogger, ILoggerOption, ISession, IVisitor,
-    IVisitorLocation, IVisitorUserAgent
+    IVisitorLocation, IVisitorUserAgent, IValidate, IResReturnOptions, IResReturn
 };
 export {app} from './app'
 export {logger, useLogger, useMorganLogger} from './logger';
 export {uid} from './uid';
 export {useRequestId} from './requestId';
 export {useVisitorInfo} from './visitor-info';
+export {util} from './util';
+export {validate} from './validation';
 
 
