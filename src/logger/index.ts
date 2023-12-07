@@ -73,8 +73,8 @@ export const logger: ILogger = {
 };
 
 export const useLogger: RequestHandler = (req, res, next) => {
-    reqId = req.id;
-    // req.logger = logger;
+    reqId      = req.id;
+    req.logger = logger;
     next();
 }
 

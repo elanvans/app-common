@@ -98,7 +98,7 @@ exports.logger = {
 };
 const useLogger = (req, res, next) => {
     reqId = req.id;
-    // req.logger = logger;
+    req.logger = exports.logger;
     next();
 };
 exports.useLogger = useLogger;

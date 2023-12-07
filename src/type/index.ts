@@ -62,6 +62,7 @@ export interface IRequest {
     id: string;
     session: ISession;
     data: any;
+    logger: ILogger;
 }
 
 export interface IResponse {
@@ -76,6 +77,6 @@ export interface INanoIdOption {
 export interface IValidate {
     init: (validations: ValidationChain[]) => RequestHandler;
     existGivenVal: (value: string, checkFn?: Function, errMsg?: string, ...additionalValue: any[]) => Promise<boolean>;
-    existEnumVal: (value: string, checkFn?: Function, errMsg?: string) => Promise<boolean>;
+    existEnumVal: (value: string, enums?: object, errMsg?: string) => Promise<boolean>;
     url: (field: string, errMsg?: string, option?: { checkDns?: boolean; isOptional?: boolean; }) => ValidationChain;
 }

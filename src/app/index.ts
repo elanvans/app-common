@@ -10,13 +10,15 @@ export const app = (name: string, port: string) => {
     _app.set('name', name);
     _app.set('port', port);
 
+    _app.use(express.raw());
+    _app.use(express.json());
+    _app.use(express.urlencoded({extended: false}));
+    _app.use(helmet({hidePoweredBy: true}));
     _app.use(useRequestId);
     _app.use(useResponseHandler);
-    _app.use(express.raw());
     _app.use(useLogger);
     _app.use(useVisitorInfo);
     _app.use(useMorganLogger);
-    _app.use(helmet({hidePoweredBy: true}));
 
     return _app;
 }
