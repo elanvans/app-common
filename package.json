@@ -1,6 +1,6 @@
 {
   "name": "@elanvans/app-common",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "author": "Elangovan",
   "packageManager": "yarn@4.0.1",
   "main": "dist/index.js",

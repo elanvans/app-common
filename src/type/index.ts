@@ -58,17 +58,6 @@ export interface IResReturn {
     internalSeverError: (error?: null | string | object, options?: IResReturnOptions) => Response;
 }
 
-export interface IRequest {
-    id: string;
-    session: ISession;
-    data: any;
-    logger: ILogger;
-}
-
-export interface IResponse {
-    return: IResReturn;
-}
-
 export interface INanoIdOption {
     size?: number;
     prefix?: string;

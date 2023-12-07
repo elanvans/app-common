@@ -49,15 +49,6 @@ export interface IResReturn {
     notFound: (error?: null | string | object, options?: IResReturnOptions) => Response;
     internalSeverError: (error?: null | string | object, options?: IResReturnOptions) => Response;
 }
-export interface IRequest {
-    id: string;
-    session: ISession;
-    data: any;
-    logger: ILogger;
-}
-export interface IResponse {
-    return: IResReturn;
-}
 export interface INanoIdOption {
     size?: number;
     prefix?: string;
