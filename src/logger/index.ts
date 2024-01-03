@@ -9,17 +9,48 @@ import {ILogger, ILoggerOption} from "../type";
 let reqId: string | null                                          = null;
 const {combine, timestamp, printf, colorize, align, json, errors} = format;
 
-const myFormat = printf(({level, message, reqId, timestamp}) => {
-    let _msg = `${level.toUpperCase().padEnd(7)} : ${message}`;
-    if (level === 'info') _msg = colors.green(_msg);
-    if (level === 'error') _msg = colors.red(_msg);
-    if (level === 'http') _msg = colors.grey(_msg);
-    return `${colors.grey(`[${timestamp} @ ${reqId}]`)} ${_msg}`;
+const myFormat = printf(({level, message, reqId, httpMethod, httpStatusCode, timestamp}) => {
+    let _level = `[${level.toUpperCase().padEnd(10)}] : `;
+    let _msg   = message;
+
+    if (level === 'http' && httpStatusCode && httpMethod) {
+        _level = `[${(httpStatusCode.toString() + ':' + httpMethod).padEnd(10)}] : `;
+    }
+
+    if (level === 'info') {
+        _msg   = colors.green(_msg);
+        _level = colors.green(_level);
+    }
+
+    if (level === 'error') {
+        _msg   = colors.red(_msg);
+        _level = colors.red(_level);
+    }
+
+    if (level === 'http') {
+        _msg = colors.grey(_msg);
+        if (httpStatusCode && httpStatusCode.toString() === '200') {
+            _level = colors.green(_level);
+        } else {
+            _level = colors.red(_level);
+        }
+    }
+
+    const _msgFormatted = `${_level}${_msg}`;
+
+    return `${colors.grey(`[${timestamp} @ ${reqId}]`)}${_msgFormatted}`;
 });
 
-const myFormatFile = printf(({level, message, reqId, timestamp}) => {
-    let _msg = `${level.toUpperCase().padEnd(7)} : ${message}`;
-    return `[${timestamp} @ ${reqId}] ${_msg}`;
+const myFormatFile = printf(({level, message, reqId, httpMethod, httpStatusCode, timestamp}) => {
+    let _level = `[${level.toUpperCase().padEnd(10)}] : `;
+    let _msg   = message;
+
+    if (level === 'http' && httpStatusCode && httpMethod) {
+        _level = `[${(httpStatusCode.toString() + ':' + httpMethod).padEnd(10)}] : `;
+    }
+
+    const _msgFormatted = `${_level}${_msg}`;
+    return `[${timestamp} @ ${reqId}]${_msgFormatted}`;
 });
 
 const _logger = winston.createLogger({
@@ -67,9 +98,9 @@ const _msgParse = (message: any, option?: ILoggerOption) => {
 }
 
 export const logger: ILogger = {
-    info: (message, option) => _logger.info(`${_msgParse(message, option)}`, {reqId: reqId}),
-    error: (message, option) => _logger.error(`${_msgParse(message, option)}`, {reqId: reqId}),
-    http: (message, option) => _logger.http(`${_msgParse(message, option)}`, {reqId: reqId}),
+    info: (message, option) => _logger.info(`${_msgParse(message, option)}`, {reqId: reqId, httpMethod: null, httpStatusCode: null}),
+    error: (message, option) => _logger.error(`${_msgParse(message, option)}`, {reqId: reqId, httpMethod: null, httpStatusCode: null}),
+    http: (message, option) => _logger.http(`${_msgParse(message, option)}`, {reqId: reqId, httpMethod: option?.httpMethod || null, httpStatusCode: option?.httpStatusCode || null}),
 };
 
 export const useLogger: RequestHandler = (req, res, next) => {
@@ -94,8 +125,8 @@ export const useMorganLogger = morgan(
     {
         stream: {
             write(str: string) {
-                // const data = JSON.parse(str);
-                logger.http(str.toString().substring(0, str.toString().lastIndexOf('\n')));
+                const data = JSON.parse(str);
+                logger.http(str.toString().substring(0, str.toString().lastIndexOf('\n')), {httpMethod: data.method, httpStatusCode: data.status});
             }
         }
     })

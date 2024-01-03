@@ -24,12 +24,11 @@ export interface IVisitor {
     location: IVisitorLocation;
     userAgent: IVisitorUserAgent;
 }
-export interface ISession {
-    visitor: IVisitor;
-}
 export interface ILoggerOption {
     refName?: string;
     file?: string;
+    httpStatusCode?: number;
+    httpMethod?: string;
 }
 export interface ILogger {
     info: (message: any, option?: ILoggerOption) => winston.Logger;

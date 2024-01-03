@@ -1,6 +1,6 @@
 import {
     INanoIdOption,
-    ILogger, ILoggerOption, ISession, IVisitor,
+    ILogger, ILoggerOption, IVisitor,
     IVisitorLocation, IVisitorUserAgent, IResReturnOptions,
     IResReturn, IValidate
 } from './type';
@@ -11,6 +11,10 @@ declare global {
         interface IResponse {}
         interface ISession {}
     }
+}
+
+export interface ISession extends AppCommon.ISession {
+    visitor: IVisitor;
 }
 
 export interface IRequest extends AppCommon.IRequest {
@@ -35,7 +39,7 @@ declare global {
 }
 
 export type {
-    INanoIdOption, ILogger, ILoggerOption, ISession, IVisitor,
+    INanoIdOption, ILogger, ILoggerOption, IVisitor,
     IVisitorLocation, IVisitorUserAgent, IValidate, IResReturnOptions, IResReturn
 };
 export {app} from './app'

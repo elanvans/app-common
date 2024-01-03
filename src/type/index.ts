@@ -28,13 +28,11 @@ export interface IVisitor {
     userAgent: IVisitorUserAgent;
 }
 
-export interface ISession {
-    visitor: IVisitor;
-}
-
 export interface ILoggerOption {
     refName?: string;
     file?: string;
+    httpStatusCode?: number;
+    httpMethod?: string;
 }
 
 export interface ILogger {
@@ -44,7 +42,7 @@ export interface ILogger {
 }
 
 export interface IResReturnOptions {
-    statusCode?: number,
+    statusCode?: number;
     message?: null | string;
     status?: string;
 }

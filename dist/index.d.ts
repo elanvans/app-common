@@ -1,4 +1,4 @@
-import { INanoIdOption, ILogger, ILoggerOption, ISession, IVisitor, IVisitorLocation, IVisitorUserAgent, IResReturnOptions, IResReturn, IValidate } from './type';
+import { INanoIdOption, ILogger, ILoggerOption, IVisitor, IVisitorLocation, IVisitorUserAgent, IResReturnOptions, IResReturn, IValidate } from './type';
 declare global {
     namespace AppCommon {
         interface IRequest {
@@ -8,6 +8,9 @@ declare global {
         interface ISession {
         }
     }
+}
+export interface ISession extends AppCommon.ISession {
+    visitor: IVisitor;
 }
 export interface IRequest extends AppCommon.IRequest {
     id: string;
@@ -26,7 +29,7 @@ declare global {
         }
     }
 }
-export type { INanoIdOption, ILogger, ILoggerOption, ISession, IVisitor, IVisitorLocation, IVisitorUserAgent, IValidate, IResReturnOptions, IResReturn };
+export type { INanoIdOption, ILogger, ILoggerOption, IVisitor, IVisitorLocation, IVisitorUserAgent, IValidate, IResReturnOptions, IResReturn };
 export { app } from './app';
 export { logger, useLogger, useMorganLogger } from './logger';
 export { uid } from './uid';

@@ -45,19 +45,40 @@ const path_1 = __importDefault(require("path"));
 require("winston-daily-rotate-file");
 let reqId = null;
 const { combine, timestamp, printf, colorize, align, json, errors } = winston_1.format;
-const myFormat = printf(({ level, message, reqId, timestamp }) => {
-    let _msg = `${level.toUpperCase().padEnd(7)} : ${message}`;
-    if (level === 'info')
+const myFormat = printf(({ level, message, reqId, httpMethod, httpStatusCode, timestamp }) => {
+    let _level = `[${level.toUpperCase().padEnd(10)}] : `;
+    let _msg = message;
+    if (level === 'http' && httpStatusCode && httpMethod) {
+        _level = `[${(httpStatusCode.toString() + ':' + httpMethod).padEnd(10)}] : `;
+    }
+    if (level === 'info') {
         _msg = colors_1.default.green(_msg);
-    if (level === 'error')
+        _level = colors_1.default.green(_level);
+    }
+    if (level === 'error') {
         _msg = colors_1.default.red(_msg);
-    if (level === 'http')
+        _level = colors_1.default.red(_level);
+    }
+    if (level === 'http') {
         _msg = colors_1.default.grey(_msg);
-    return `${colors_1.default.grey(`[${timestamp} @ ${reqId}]`)} ${_msg}`;
+        if (httpStatusCode && httpStatusCode.toString() === '200') {
+            _level = colors_1.default.green(_level);
+        }
+        else {
+            _level = colors_1.default.red(_level);
+        }
+    }
+    const _msgFormatted = `${_level}${_msg}`;
+    return `${colors_1.default.grey(`[${timestamp} @ ${reqId}]`)}${_msgFormatted}`;
 });
-const myFormatFile = printf(({ level, message, reqId, timestamp }) => {
-    let _msg = `${level.toUpperCase().padEnd(7)} : ${message}`;
-    return `[${timestamp} @ ${reqId}] ${_msg}`;
+const myFormatFile = printf(({ level, message, reqId, httpMethod, httpStatusCode, timestamp }) => {
+    let _level = `[${level.toUpperCase().padEnd(10)}] : `;
+    let _msg = message;
+    if (level === 'http' && httpStatusCode && httpMethod) {
+        _level = `[${(httpStatusCode.toString() + ':' + httpMethod).padEnd(10)}] : `;
+    }
+    const _msgFormatted = `${_level}${_msg}`;
+    return `[${timestamp} @ ${reqId}]${_msgFormatted}`;
 });
 const _logger = winston_1.default.createLogger({
     level: 'silly',
@@ -92,9 +113,9 @@ const _msgParse = (message, option) => {
     return ((option === null || option === void 0 ? void 0 : option.refName) || (option === null || option === void 0 ? void 0 : option.file)) ? `[${_pathResolve(option === null || option === void 0 ? void 0 : option.file)}@${option === null || option === void 0 ? void 0 : option.refName}] ${message}` : `${message}`;
 };
 exports.logger = {
-    info: (message, option) => _logger.info(`${_msgParse(message, option)}`, { reqId: reqId }),
-    error: (message, option) => _logger.error(`${_msgParse(message, option)}`, { reqId: reqId }),
-    http: (message, option) => _logger.http(`${_msgParse(message, option)}`, { reqId: reqId }),
+    info: (message, option) => _logger.info(`${_msgParse(message, option)}`, { reqId: reqId, httpMethod: null, httpStatusCode: null }),
+    error: (message, option) => _logger.error(`${_msgParse(message, option)}`, { reqId: reqId, httpMethod: null, httpStatusCode: null }),
+    http: (message, option) => _logger.http(`${_msgParse(message, option)}`, { reqId: reqId, httpMethod: (option === null || option === void 0 ? void 0 : option.httpMethod) || null, httpStatusCode: (option === null || option === void 0 ? void 0 : option.httpStatusCode) || null }),
 };
 const useLogger = (req, res, next) => {
     reqId = req.id;
@@ -116,8 +137,8 @@ exports.useMorganLogger = (0, morgan_1.default)((tokens, req, res) => {
 }, {
     stream: {
         write(str) {
-            // const data = JSON.parse(str);
-            exports.logger.http(str.toString().substring(0, str.toString().lastIndexOf('\n')));
+            const data = JSON.parse(str);
+            exports.logger.http(str.toString().substring(0, str.toString().lastIndexOf('\n')), { httpMethod: data.method, httpStatusCode: data.status });
         }
     }
 });
